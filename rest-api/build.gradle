@@ -1,0 +1,194 @@
+import io.swagger.codegen.DefaultGenerator
+import io.swagger.codegen.config.CodegenConfigurator
+
+buildscript {
+    ext {
+        springBootVersion = '2.1.7.RELEASE'
+        springfoxVersion = '2.9.2'
+        swaggerCodegenVersion = '2.4.8'
+        jacksonDatatypeThreetenbp = '2.6.4'
+        immutablesVersion = '2.7.5'
+        mapstructVersion = '1.3.0.Final'
+        modelmapperVersion = '2.3.2'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+        classpath("io.swagger:swagger-codegen:$swaggerCodegenVersion")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+sourceCompatibility = 11
+
+repositories {
+   jcenter()
+}
+
+configurations {
+    generatedAnimalSuperStoreCompile
+    generatedThirdPartyCompile
+}
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-devtools")
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml'
+
+    implementation 'com.h2database:h2'
+    implementation "io.springfox:springfox-swagger2:${springfoxVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+    implementation "joda-time:joda-time"
+    implementation "org.mapstruct:mapstruct-jdk8:$mapstructVersion"
+    implementation "org.modelmapper:modelmapper:$modelmapperVersion"
+
+
+    compileOnly 'org.projectlombok:lombok'
+    compileOnly "org.immutables:value-annotations:$immutablesVersion"
+    compileOnly "org.immutables:value:$immutablesVersion"
+
+
+    annotationProcessor "org.immutables:value:$immutablesVersion"
+    annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation(project(':web-ui'))
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // OUR REST API AND MODELS
+    generatedAnimalSuperStoreCompile 'org.springframework.boot:spring-boot-starter-data-rest'
+    generatedAnimalSuperStoreCompile "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+    generatedAnimalSuperStoreCompile "io.springfox:springfox-swagger2:${springfoxVersion}"
+    generatedAnimalSuperStoreCompile "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+
+
+    // THIRD PARTY REST API AND MODELS
+    generatedThirdPartyCompile 'org.springframework.boot:spring-boot-starter-data-rest'
+    generatedThirdPartyCompile "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+    generatedThirdPartyCompile "io.springfox:springfox-swagger2:${springfoxVersion}"
+    generatedThirdPartyCompile "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+
+
+}
+
+
+// OUR REST API AND MODELS
+def animalSuperStoreSwaggerSourceFile = 'src/main/resources/swagger/animal-super-store.yaml'
+def animalSuperStoreGeneratedTargetFolder = 'src/generatedanimalsuperstore/java'
+
+task generateAnimalSuperStoreApi {
+    inputs.file("$projectDir/$animalSuperStoreSwaggerSourceFile")
+    outputs.dir("$projectDir/$animalSuperStoreGeneratedTargetFolder")
+    doLast{
+        def config =  new CodegenConfigurator()
+        config.setInputSpec("file:///$projectDir/$animalSuperStoreSwaggerSourceFile")
+        config.setOutputDir("$projectDir")
+        config.setLang('spring')
+        config.setAdditionalProperties([
+                'dateLibrary'   : 'java8',
+                'interfaceOnly' : 'true',
+                'apiPackage'    : 'com.bipinet.animalsuperstore.api',
+                'modelPackage'  : 'com.bipinet.animalsuperstore.model',
+                'sourceFolder'  : animalSuperStoreGeneratedTargetFolder
+        ])
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}
+
+// THIRD PARTY REST API AND MODELS
+def swaggerThirdPartySourceFile = 'src/main/resources/swagger/third-party/pet-store.json'
+def generatedThirdPartyTargetFolder = 'src/generatedthirdparty/java'
+
+task generateThirdPartyApi {
+    inputs.file("$projectDir/$swaggerThirdPartySourceFile")
+    outputs.dir("$projectDir/$generatedThirdPartyTargetFolder")
+    doLast{
+        def config = new CodegenConfigurator()
+        config.setInputSpec("file:///$projectDir/$swaggerThirdPartySourceFile")
+        config.setOutputDir("$projectDir")
+        config.setLang('java')
+        config.setLibrary('resttemplate')
+        config.setAdditionalProperties([
+                'modelDocs'     : 'false',
+                'modelTests'    : 'false',
+                'apiDocs'       : 'false',
+                'apiTests'      : 'false',
+                'dateLibrary'   : 'java8',
+                'interfaceOnly' : 'true',
+                'apiPackage'    : 'io.swagger.petstore.api',
+                'modelPackage'  : 'io.swagger.petstore.model',
+                'sourceFolder'  : generatedThirdPartyTargetFolder
+        ])
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}
+
+
+// TASK AND SOURCE SET CONFIGURATION
+task generateApis(type: GradleBuild) {
+    tasks = ['generateAnimalSuperStoreApi', 'generateThirdPartyApi']
+}
+
+clean.doFirst {
+    delete("${projectDir}/$animalSuperStoreGeneratedTargetFolder")
+    delete("${projectDir}/$generatedThirdPartyTargetFolder")
+}
+
+sourceSets {
+    generatedanimalsuperstore {
+        compileClasspath = configurations.generatedAnimalSuperStoreCompile
+    }
+    generatedthirdparty {
+        compileClasspath = configurations.generatedThirdPartyCompile
+    }
+    main {
+        compileClasspath += generatedanimalsuperstore.output
+        compileClasspath += generatedthirdparty.output
+
+        runtimeClasspath += generatedanimalsuperstore.output
+        runtimeClasspath += generatedthirdparty.output
+    }
+    test {
+        compileClasspath += generatedanimalsuperstore.output
+        compileClasspath += generatedthirdparty.output
+
+        runtimeClasspath += generatedanimalsuperstore.output
+        runtimeClasspath += generatedthirdparty.output
+    }
+}
+
+compileJava {
+    options.annotationProcessorPath = configurations.annotationProcessor
+}
+
+compileTestJava {
+    options.compilerArgs += '-proc:none'
+}
+
+bootRun {
+    classpath += sourceSets.generatedanimalsuperstore.output
+    classpath += sourceSets.generatedthirdparty.output
+}
+
+jar {
+    from sourceSets.generatedanimalsuperstore.output
+    from sourceSets.generatedthirdparty.output
+}
+
+compileGeneratedanimalsuperstoreJava.dependsOn generateAnimalSuperStoreApi
+compileGeneratedthirdpartyJava.dependsOn generateThirdPartyApi
+
+classes.dependsOn generatedanimalsuperstoreClasses
+classes.dependsOn generatedthirdpartyClasses
+compileJava.dependsOn compileGeneratedanimalsuperstoreJava
+compileJava.dependsOn compileGeneratedthirdpartyJava
+ideaModule.dependsOn generateApis

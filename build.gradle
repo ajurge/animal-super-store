@@ -1,0 +1,9 @@
+plugins {
+    id 'java'
+}
+
+allprojects {
+    group 'com.bipinet.animalsuperstore'
+    version '1.0.0-SNAPSHOT'
+}
+

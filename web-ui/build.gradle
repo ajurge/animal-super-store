@@ -1,0 +1,54 @@
+import io.swagger.codegen.DefaultGenerator
+import io.swagger.codegen.config.CodegenConfigurator
+
+buildscript {
+  ext {
+    swaggerCodegenVersion = '2.4.8'
+  }
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("io.swagger:swagger-codegen:$swaggerCodegenVersion")
+  }
+}
+
+plugins {
+  id 'java'
+  id "com.moowork.node" version "1.3.1"
+}
+
+def animalSuperStoreSwaggerSourceFile = "${project.rootDir}/rest-api/src/main/resources/swagger/animal-super-store.yaml"
+def animalSuperStoreGeneratedTargetFolder = 'src/generated/'
+
+task generateAnimalSuperStoreApi {
+  println "$animalSuperStoreSwaggerSourceFile"
+  doLast{
+    def config =  new CodegenConfigurator()
+    config.setInputSpec("file:///$animalSuperStoreSwaggerSourceFile")
+    config.setOutputDir("$projectDir/$animalSuperStoreGeneratedTargetFolder")
+    config.setLang('typescript-angular')
+    config.setAdditionalProperties([
+      'ngVersion'     : '8.2.4'
+    ])
+    new DefaultGenerator().opts(config.toClientOptInput()).generate()
+  }
+}
+
+// TASK AND SOURCE SET CONFIGURATION
+clean.doFirst {
+  delete("${projectDir}/$animalSuperStoreGeneratedTargetFolder")
+}
+
+node {
+  version = '12.9.1'
+  npmVersion = ' 6.10.2'
+  download = true
+}
+
+jar.dependsOn generateAnimalSuperStoreApi
+jar.dependsOn 'npm_run_build'
+
+jar {
+  from 'dist/web-ui' into 'static'
+}

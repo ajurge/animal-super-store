@@ -1,0 +1,4 @@
+rootProject.name = 'animal-super-store'
+include 'rest-api'
+include 'web-ui'
+
