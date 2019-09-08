@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AnimalRepository extends JpaRepository<Animal, Long> {
 
-  Optional<Animal> findAnimalByThirdPartyIdAndSource(Long thirdPartyId, SourceEnum source);
+  Optional<Animal> findAnimalByThirdPartyIdAndSource(String thirdPartyId, SourceEnum source);
 
 }

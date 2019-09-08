@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  API_BASE_PATH: 'http://127.0.0.1:4200/api'
+  API_BASE_PATH: '/api'
 };
 
 /*

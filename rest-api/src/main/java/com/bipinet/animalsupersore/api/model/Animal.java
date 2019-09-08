@@ -30,7 +30,7 @@ public class Animal {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private Long thirdPartyId;
+  private String thirdPartyId;
   private String name;
   @ElementCollection(targetClass = String.class)
   private List<String> photoUrls;
@@ -38,57 +38,121 @@ public class Animal {
   private AnimalDto.ExternalStatusEnum externalStatus;
   private AnimalDto.InternalStatusEnum internalStatus;
 
+  public Animal() {
+  }
+
+  public Animal(String thirdPartyId, String name, List<String> photoUrls,
+      SourceEnum source,
+      ExternalStatusEnum externalStatus,
+      InternalStatusEnum internalStatus) {
+    this.thirdPartyId = thirdPartyId;
+    this.name = name;
+    this.photoUrls = photoUrls;
+    this.source = source;
+    this.externalStatus = externalStatus;
+    this.internalStatus = internalStatus;
+  }
+
+  public static Builder builder() {
+    return new Builder();
+  }
+
+  public static class Builder {
+
+    private String thirdPartyId;
+    private String name;
+    private List<String> photoUrls;
+    private SourceEnum source;
+    private ExternalStatusEnum externalStatus;
+    private InternalStatusEnum internalStatus;
+
+    public Builder setThirdPartyId(final String thirdPartyId) {
+      this.thirdPartyId = thirdPartyId;
+      return this;
+    }
+
+    public Builder setName(final String name) {
+      this.name = name;
+      return this;
+    }
+
+    public Builder setPhotoUrls(final List<String> photoUrls) {
+      this.photoUrls = photoUrls;
+      return this;
+    }
+
+    public Builder setSource(final SourceEnum source) {
+      this.source = source;
+      return this;
+    }
+
+    public Builder setExternalStatus(final ExternalStatusEnum externalStatus) {
+      this.externalStatus = externalStatus;
+      return this;
+    }
+
+    public Builder setInternalStatus(final InternalStatusEnum internalStatus) {
+      this.internalStatus = internalStatus;
+      return this;
+    }
+
+    public Animal build() {
+      return new Animal(this.thirdPartyId, this.name, this.photoUrls, this.source,
+          this.externalStatus, this.internalStatus);
+    }
+  }
+
   public Long getId() {
     return id;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Long getThirdPartyId() {
+  public String getThirdPartyId() {
     return thirdPartyId;
-  }
-
-  public void setThirdPartyId(Long thirdPartyId) {
-    this.thirdPartyId = thirdPartyId;
   }
 
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public List<String> getPhotoUrls() {
     return photoUrls;
-  }
-
-  public void setPhotoUrls(List<String> photoUrls) {
-    this.photoUrls = photoUrls;
   }
 
   public SourceEnum getSource() {
     return source;
   }
 
-  public void setSource(SourceEnum source) {
-    this.source = source;
-  }
-
   public ExternalStatusEnum getExternalStatus() {
     return externalStatus;
+  }
+
+  public InternalStatusEnum getInternalStatus() {
+    return internalStatus;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setThirdPartyId(String thirdPartyId) {
+    this.thirdPartyId = thirdPartyId;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setPhotoUrls(List<String> photoUrls) {
+    this.photoUrls = photoUrls;
+  }
+
+  public void setSource(SourceEnum source) {
+    this.source = source;
   }
 
   public void setExternalStatus(
       ExternalStatusEnum externalStatus) {
     this.externalStatus = externalStatus;
-  }
-
-  public InternalStatusEnum getInternalStatus() {
-    return internalStatus;
   }
 
   public void setInternalStatus(
@@ -123,7 +187,7 @@ public class Animal {
   public String toString() {
     return "Animal{" +
         "id=" + id +
-        ", thirdPartyId=" + thirdPartyId +
+        ", thirdPartyId='" + thirdPartyId + '\'' +
         ", name='" + name + '\'' +
         ", photoUrls=" + photoUrls +
         ", source=" + source +

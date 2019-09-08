@@ -12,17 +12,35 @@ import {
   Configuration,
   ThirdPartyRestEndpointService
 } from "../generated";
-import {MatButtonModule, MatDialogModule, MatTableModule, MatTabsModule} from "@angular/material";
-import {ModalMessageWindow, Table1Component} from './table1/table1.component';
-import {Table2Component} from './table2/table2.component';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatDialogModule, MatFormFieldModule,
+  MatIconModule,
+  MatPaginatorModule, MatSelectModule, MatSortModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule
+} from "@angular/material";
+import {ThirdPartyComponent} from './third-party/third-party.component';
+import {AnimalSuperStoreComponent} from './animal-super-store/animal-super-store.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppOverlayModule} from "./overlay/overlay.module";
+import {ProgressSpinnerModule} from "./progress-spinner/progress-spinner.module";
+import {ProgressSpinnerComponent} from "./progress-spinner/progress-spinner.component";
+import {ModalMessageWindowComponent} from './modal-message-window/modal-message-window.component';
 
 @NgModule({
-  entryComponents: [AppComponent, ModalMessageWindow],
+  entryComponents: [
+    AppComponent,
+    ModalMessageWindowComponent,
+    ProgressSpinnerComponent,
+  ],
   declarations: [
     AppComponent,
-    Table1Component,
-    Table2Component,
-    ModalMessageWindow,
+    AnimalSuperStoreComponent,
+    ModalMessageWindowComponent,
+    ThirdPartyComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,7 +52,17 @@ import {Table2Component} from './table2/table2.component';
     MatTableModule,
     MatTabsModule,
     MatButtonModule,
-    MatDialogModule
+    MatDialogModule,
+    AppRoutingModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatCardModule,
+    AppOverlayModule,
+    ProgressSpinnerModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [{provide: BASE_PATH, useValue: environment.API_BASE_PATH}, AnimalRestEndpointService,
     ThirdPartyRestEndpointService],

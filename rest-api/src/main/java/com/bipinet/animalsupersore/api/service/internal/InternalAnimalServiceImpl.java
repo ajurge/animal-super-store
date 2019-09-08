@@ -36,7 +36,7 @@ public class InternalAnimalServiceImpl implements AnimalService {
   }
 
   private Animal createAnimal(AddAnimalDto addAnimalDto) {
-    final var animalInThirdParty = petApi.getPetById(addAnimalDto.getId());
+    final var animalInThirdParty = petApi.getPetById(Long.valueOf(addAnimalDto.getId()));
     final var animal = new Animal();
     animal.setThirdPartyId(addAnimalDto.getId());
     animal

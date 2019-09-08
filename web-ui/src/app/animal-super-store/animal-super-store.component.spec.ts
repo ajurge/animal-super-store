@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Table2Component } from './table2.component';
+import { AnimalSuperStoreComponent } from './animal-super-store.component';
 
 describe('Table2Component', () => {
-  let component: Table2Component;
-  let fixture: ComponentFixture<Table2Component>;
+  let component: AnimalSuperStoreComponent;
+  let fixture: ComponentFixture<AnimalSuperStoreComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ Table2Component ]
+      declarations: [ AnimalSuperStoreComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(Table2Component);
+    fixture = TestBed.createComponent(AnimalSuperStoreComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

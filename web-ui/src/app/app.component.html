@@ -1,8 +1,25 @@
-<mat-tab-group dynamicHeight>
-  <mat-tab label="Third Party">
-      <table-1></table-1>
-  </mat-tab>
-  <mat-tab label="Animal Super Store">
-      <table-2></table-2>
-  </mat-tab>
-</mat-tab-group>
+<mat-toolbar color="primary">
+  <span> Animal Super Store </span>
+  <!-- This fills the remaining space of the current row -->
+  <span class="example-fill-remaining-space"></span>
+</mat-toolbar>
+
+<!--<mat-tab-group dynamicHeight>-->
+<!--  <mat-tab label="Third Party">-->
+<!--      <animal-super-store></animal-super-store>-->
+<!--  </mat-tab>-->
+<!--  <mat-tab label="Animal Super Store">-->
+<!--      <third-party></third-party>-->
+<!--  </mat-tab>-->
+<!--</mat-tab-group>-->
+
+<nav mat-tab-nav-bar>
+  <a mat-tab-link
+     *ngFor="let link of navLinks"
+     [routerLink]="link.link"
+     routerLinkActive #rla="routerLinkActive"
+     [active]="rla.isActive">
+    {{link.label}}
+  </a>
+</nav>
+<router-outlet></router-outlet>
