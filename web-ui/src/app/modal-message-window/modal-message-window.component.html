@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>{{modalMessageData.title}}
+  <mat-icon *ngIf="!modalMessageData.success" color="warn">error</mat-icon>
+  <mat-icon *ngIf="modalMessageData.success" [ngStyle]="{'color':'green'}">check_circle</mat-icon>
+</h1>
+<div mat-dialog-content *ngIf="modalMessageData.id">
+  <p>Animal from <b>{{modalMessageData.source}}</b></p>
+  <ul>
+    <li>
+      <span>&#10003; <b>ID:</b> {{modalMessageData.id}} </span>
+    </li>
+    <li>
+      <span>&#10003; <b>Name:</b> {{modalMessageData.name}} </span>
+    </li>
+  </ul>
+</div>
+<mat-card-content *ngIf="!modalMessageData.success" [ngStyle]="{'color':'red'}">{{modalMessageData.errorMessage}}</mat-card-content>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()" cdkFocusInitial>Ok</button>
+</div>

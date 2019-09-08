@@ -29,3 +29,12 @@ out/
 
 ### VS Code ###
 .vscode/
+
+generatedanimalsuperstore
+generatedthirdparty
+.swagger-codegen
+/*/docs
+/*/gradle
+/*/node_modules
+/**/generated
+/**/dist
