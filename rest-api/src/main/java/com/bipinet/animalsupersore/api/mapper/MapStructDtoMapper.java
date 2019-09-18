@@ -9,9 +9,9 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(config = MapStructCentralConfig.class)
-public interface MapStrucyDtoMapper {
+public interface MapStructDtoMapper {
 
-  MapStrucyDtoMapper INSTANCE = Mappers.getMapper(MapStrucyDtoMapper.class);
+  MapStructDtoMapper INSTANCE = Mappers.getMapper(MapStructDtoMapper.class);
 
 
   /*Third-party*/

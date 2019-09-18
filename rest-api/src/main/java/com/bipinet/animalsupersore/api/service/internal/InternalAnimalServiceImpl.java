@@ -1,6 +1,6 @@
 package com.bipinet.animalsupersore.api.service.internal;
 
-import com.bipinet.animalsupersore.api.mapper.MapStrucyDtoMapper;
+import com.bipinet.animalsupersore.api.mapper.MapStructDtoMapper;
 import com.bipinet.animalsupersore.api.model.Animal;
 import com.bipinet.animalsupersore.api.repository.AnimalRepository;
 import com.bipinet.animalsuperstore.model.AddAnimalDto;
@@ -32,7 +32,7 @@ public class InternalAnimalServiceImpl implements AnimalService {
 
   @Override
   public List<AnimalDto> getAllAnimals() {
-    return MapStrucyDtoMapper.INSTANCE.animalsToAnimalDtos(animalRepository.findAll());
+    return MapStructDtoMapper.INSTANCE.animalsToAnimalDtos(animalRepository.findAll());
   }
 
   private Animal createAnimal(AddAnimalDto addAnimalDto) {

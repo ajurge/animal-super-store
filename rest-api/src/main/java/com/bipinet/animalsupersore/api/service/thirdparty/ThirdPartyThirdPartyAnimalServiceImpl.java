@@ -1,6 +1,6 @@
 package com.bipinet.animalsupersore.api.service.thirdparty;
 
-import com.bipinet.animalsupersore.api.mapper.MapStrucyDtoMapper;
+import com.bipinet.animalsupersore.api.mapper.MapStructDtoMapper;
 import com.bipinet.animalsuperstore.model.AnimalDto;
 import io.swagger.petstore.api.PetApi;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class ThirdPartyThirdPartyAnimalServiceImpl implements ThirdPartyAnimalSe
   @Override
   public List<AnimalDto> findThirdPartyAnimalByStatus(String status) {
     final List<AnimalDto> animalDtos =
-        MapStrucyDtoMapper.INSTANCE
+        MapStructDtoMapper.INSTANCE
             .petsToAnimalDtos(petApi.findPetsByStatus(Arrays.asList(status)));
     animalDtos.stream().forEach(animalDto -> {
           animalDto.setSource(AnimalDto.SourceEnum.SWAGGER_PETSTORE);

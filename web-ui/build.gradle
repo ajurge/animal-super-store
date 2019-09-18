@@ -52,3 +52,9 @@ jar.dependsOn 'npm_run_build'
 jar {
   from 'dist/web-ui' into 'static'
 }
+
+task serveWebUI(type: NpmTask, dependsOn: 'npm_run_build') {
+  group = 'application'
+  description = 'Run the Web UI'
+  args = ['run', 'start']
+}
